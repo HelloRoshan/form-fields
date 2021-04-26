@@ -28,7 +28,7 @@
               :required="true"
               type="text"></b-form-input>
           </b-col>
-          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
+          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2" v-if="selected != 'toggle'">
             <b-row class="m-0">
               <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
               <b-col sm="12" class="p-0"><ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/></b-col>
@@ -98,7 +98,7 @@
           <b-col sm="12" class="p-2">
             <label
               :for="'input-'+index">
-              {{index + 1  +')&nbsp;'}}{{inputType.label}} <span class="required-text" v-if="inputType.isRequired">(* Required)</span>
+              {{index + 1  +')&nbsp;'}}{{inputType.label}}
             </label>
           </b-col>
           <b-col sm="12">
@@ -109,25 +109,31 @@
                 :type="inputType.type"
                 :placeholder="inputType.placeholder"
                 v-model.trim="inputTypeList[index].value"
+                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
                 class="input-width mb-2"></b-form-input>
             </template>
             <template v-else-if="inputType.type == 'textarea'">
               <b-form-textarea
-                rows="4"
-                max-rows="8"
+                rows="5"
                 no-resize
                 :required="inputType.isRequired"
                 :placeholder="inputType.placeholder"
+                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
                 v-model.trim="inputTypeList[index].value"
                 class="input-width mb-2"></b-form-textarea>
             </template>
             <template v-else-if="inputType.type == 'checkbox'">
-              <b-form-checkbox-group v-model="inputTypeList[index].checkedOptions">
+              <b-form-checkbox-group
+                v-model="inputTypeList[index].checkedOptions"
+                :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
                 <b-form-checkbox
                   v-for="(option, index1) in inputType.options"
                   :key="index1"
                   :value="option"
                   class="mb-2 input-width">{{option}}</b-form-checkbox>
+                  <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
+                    Please select one or more options
+                  </b-form-invalid-feedback>
               </b-form-checkbox-group>
             </template>
             <template v-else-if="inputType.type == 'radio'">
@@ -136,14 +142,19 @@
                 :key="index +'radio'+index1"
                 :name="index+'radio-button'"
                 :value="option"
+                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
                 v-model="inputTypeList[index].value"
                 class="mb-2 input-width"
               >{{option}}</b-form-radio>
+              <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false">
+                Please select one option
+              </b-form-invalid-feedback>
             </template>
             <template v-else-if="inputType.type == 'select'">
               <b-form-select
                 :options="inputType.options"
                 v-model="inputTypeList[index].value"
+                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
                 class="mb-2 input-width"></b-form-select>
             </template>
             <template v-else-if="inputType.type == 'toggle'">
