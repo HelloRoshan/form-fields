@@ -60,27 +60,6 @@
               </template>
             </b-col>
           </template>
-          
-          <b-col sm="12" class="p-0 mr-2 mt-2 mb-2" v-if="selected  == 'toggle'">
-            <b-row>
-              <b-col sm="6">
-                <label for="toggle-option-one">Option One</label>
-                <b-form-input
-                  id="toggle-option-one"
-                  v-model.trim="toggleOptionOne"
-                  :required="true"
-                  type="text"></b-form-input>
-              </b-col>
-              <b-col sm="6">
-                <label for="toggle-option-two">Option Two</label>
-                <b-form-input
-                  id="toggle-option-two"
-                  v-model.trim="toggleOptionTwo"
-                  :required="true"
-                  type="text"></b-form-input>
-              </b-col>
-            </b-row>
-          </b-col>
         </b-row>
       </b-card>
       
@@ -104,7 +83,9 @@
             <template v-else-if="inputType.type == 'checkbox'"></template>
             <template v-else-if="inputType.type == 'radio'"></template>
             <template v-else-if="inputType.type == 'select'"></template>
-            <template v-else-if="inputType.type == 'toggle'"></template>
+            <template v-else-if="inputType.type == 'toggle'">
+              <ToggleSwitch />
+            </template>
             <template v-else-if="inputType.type == 'datetime'"></template>
           </b-col>
         </b-row>
@@ -118,12 +99,15 @@
 
 <script>
 import { BIconCircle, BIconCheckSquare, BIconTrash } from 'bootstrap-vue';
+import ToggleSwitch from './components/ToggleSwitch.vue';
+
 export default {
   name: 'App',
   components: {
     BIconCircle,
     BIconCheckSquare,
-    BIconTrash
+    BIconTrash,
+    ToggleSwitch
   },
   data() {
     return {
@@ -145,8 +129,6 @@ export default {
       placeholderTitle: '',
       selected: 'text',
       inputTypeList: [],
-      toggleOptionOne: '',
-      toggleOptionTwo: ''
     }
   },
   computed: {
@@ -154,8 +136,7 @@ export default {
       return !this.labelTitle ||
         (this.optionInputTypes.includes(this.selected) &&
           (!this.inputInnerOptions.length ||
-            this.inputInnerOptions.some(opt => !!opt.trim() ==  false))) ||
-            (this.selected == 'toggle' && (!this.toggleOptionOne.trim() || !this.toggleOptionTwo.trim()));
+            this.inputInnerOptions.some(opt => !!opt.trim() ==  false)));
     }
   },
   watch: {
@@ -166,8 +147,6 @@ export default {
       if(this.placeholderInputTypes.includes(oldValue) && !this.placeholderInputTypes.includes(newValue)) {
         this.placeholderTitle = '';
       }
-      this.toggleOptionOne = '';
-      this.toggleOptionTwo = '';
     }
   },
   mounted() {
@@ -182,15 +161,15 @@ export default {
         label: this.labelTitle,
         type: this.selected,
         placeholder: this.placeholderInputTypes.includes(this.selected) ? this.placeholderTitle : '',
-        options: (this.optionInputTypes.includes(this.selected)) ? this.inputInnerOptions : []
+        options: this.optionInputTypes.includes(this.selected)
+          ? this.inputInnerOptions
+          : []
       });
       //Reset Values
       this.selected = 'text';
       this.inputInnerOptions = ['Option'],
       this.labelTitle = '';
       this.placeholderTitle = '';
-      this.toggleOptionOne = '';
-      this.toggleOptionTwo = '';
     },
     addInnerOption() {
       this.inputInnerOptions.push(`Option`);
