@@ -201,7 +201,7 @@ export default {
           placeholder: this.placeholderInputTypes.includes(inputType.type) ? inputType.placeholder : 'N/A',
           options: ['checkbox', 'radio', 'select'].includes(inputType.type) ? inputType.options.join(', ') : 'N/A',
           selected_option: inputType.type == 'checkbox' ? inputType.checkedOptions.join(', ') : inputType.type == 'radio' ? inputType.value : 'N/A',
-          answer: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
+          input_field_value: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
         }
       })
     }
@@ -235,6 +235,15 @@ export default {
         isRequired: this.isRequired,
         value: this.selected == 'toggle' ? false : '',
       });
+
+      // Notification
+      this.$bvToast.toast('New Input Field added to Form', {
+        title: 'Input Added',
+        autoHideDelay: 3000,
+        variant: 'success',
+        solid: true,
+      });
+
       //Reset Values
       this.selected = 'text';
       this.inputInnerOptions = ['Option'],
