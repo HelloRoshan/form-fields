@@ -222,9 +222,9 @@ export default {
           type: inputType.type,
           is_required: inputType.isRequired,
           placeholder: this.placeholderInputTypes.includes(inputType.type) ? inputType.placeholder : 'N/A',
-          options: ['checkbox', 'radio', 'select'].includes(inputType.type) ? inputType.options.join(', ') : 'N/A',
+          given_options: ['checkbox', 'radio', 'select'].includes(inputType.type) ? inputType.options.join(', ') : 'N/A',
           selected_options: inputType.type == 'checkbox' ? inputType.checkedOptions.join(', ') : inputType.type == 'radio' ? inputType.value : 'N/A',
-          input_field_value: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
+          entered_input_value: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
         }
       })
     }
