@@ -39,7 +39,7 @@
             <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
               <template v-for="(inputInnerOption, index) in inputInnerOptions">
                 <b-row :key="index" class="mt-2 mb-3">
-                  <b-col sm="1" style="margin: auto;">
+                  <b-col sm="1" style="margin: auto;text-align:center;">
                     <template v-if="selected == 'checkbox'">
                       <BIconCheckSquare />
                     </template>
