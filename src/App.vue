@@ -13,7 +13,7 @@
               :options="options"></b-form-select>
           </b-col>
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
-            <label for="label-title ">Enter Label for Input Type</label>
+            <label for="label-title ">Enter Label for Input <span style="color:red;">*</span></label>
             <b-form-input
               id="label-title"
               v-model.trim="labelTitle"
@@ -24,7 +24,7 @@
             <label for="label-title ">Enter Placeholder for Input Type</label>
             <b-form-input
               id="label-title"
-              v-model.trim="labelTitle"
+              v-model.trim="placeholderTitle"
               :required="true"
               type="text"></b-form-input>
           </b-col>
@@ -33,31 +33,31 @@
             <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
               <template v-for="(inputInnerOption, index) in inputInnerOptions">
                 <b-row :key="index" class="mt-2 mb-3">
-                  <b-col sm="2">
+                  <b-col sm="1" style="margin: auto;">
                     <template v-if="selected == 'checkbox'">
-                      x
+                      <BIconCheckSquare />
                     </template>
                     <template v-else-if="selected == 'radio'">
-                      o
+                      <BIconCircle />
                     </template>
                     <template v-else>
                       {{index + 1}}.
                     </template>
                   </b-col>
-                  <b-col sm="8">
+                  <b-col sm="6">
                     <b-form-input
                       v-model.trim="inputInnerOptions[index]"
                       type="text"></b-form-input>
                   </b-col>
-                  <b-col sm="2">
+                  <b-col sm="1" offset-sm="4" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
                     <!-- TODO: Show on Hover -->
-                    <span @click="removeOption(index)" style="color:red;">X</span>
+                    <BIconTrash  @click="removeOption(index)" style="color:red;"/>
+                  </b-col>
+                  <b-col :sm="inputInnerOptions.length > 1 ? 4: 5">
+                    <b-button variant="success" @click="addInnerOption" v-if="index + 1 == inputInnerOptions.length">Add New Option</b-button>
                   </b-col>
                 </b-row>
               </template>
-            </b-col>
-            <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
-              <b-button variant="success" @click="addInnerOption">Add Option</b-button>
             </b-col>
           </template>
           
@@ -86,7 +86,7 @@
       
       <!-- TODO: Add possible checks for each inputtype -->
       <b-row class="m-0 mt-2">
-        <b-button variant="success" :disabled="!labelTitle" @click="addInput">Add Input</b-button>
+        <b-button variant="success" :disabled="inputValidityCheck" @click="addInput">Add Input</b-button>
       </b-row>
       <b-card class="mt-4 mb-4" align="left">
         <b-row v-for="(inputType, index) in inputTypeList" :key="inputType.id" class="mb-3">
@@ -116,9 +116,14 @@
 </template>
 
 <script>
-
+import { BIconCircle, BIconCheckSquare, BIconTrash } from 'bootstrap-vue';
 export default {
   name: 'App',
+  components: {
+    BIconCircle,
+    BIconCheckSquare,
+    BIconTrash
+  },
   data() {
     return {
       options: [
@@ -136,28 +141,32 @@ export default {
       optionInputTypes: ['checkbox', 'radio', 'select'],
       inputInnerOptions: ['Option'],
       labelTitle: '',
+      placeholderTitle: '',
       selected: 'text',
-      inputTypeList: [
-        /* Test Data */
-        // {
-        //   label: 'Name',
-        //   type: 'text',
-        //   id: 0
-        // }
-        // Format
-        /* {
-          label: ,
-          type: ,
-          placeholder: ,
-        } */
-      ], // should have label, type, placeholder*, options: [], remove option, min max
+      inputTypeList: [],
       toggleOptionOne: '',
       toggleOptionTwo: ''
     }
   },
+  computed: {
+    inputValidityCheck() {
+      return !this.labelTitle ||
+        !(this.optionInputTypes.includes(this.selected) &&
+          this.inputInnerOptions.length &&
+            this.inputInnerOptions.some(opt => !!opt ==  true)) ||
+            !(this.selected == 'toggle' && this.toggleOptionOne.trim() && this.toggleOptionTwo.trim());
+    }
+  },
   watch: {
-    selected() {
-      // reset internal options and values
+    selected: function(newValue, oldValue) {
+      if(this.optionInputTypes.includes(oldValue) && !this.optionInputTypes.includes(newValue)) {
+        this.inputInnerOptions = ['Option'];
+      }
+      if(this.placeholderInputTypes.includes(oldValue) && !this.placeholderInputTypes.includes(newValue)) {
+        this.placeholderTitle = '';
+      }
+      this.toggleOptionOne = '';
+      this.toggleOptionTwo = '';
     }
   },
   mounted() {
@@ -165,12 +174,22 @@ export default {
   },
   methods: {
     addInput() {
+      if(this.optionInputTypes.includes(this.selected)) {
+        this.inputInnerOptions = this.inputInnerOptions.filter(opt => !!opt.trim())
+      }
       this.inputTypeList.push({
         label: this.labelTitle,
-        type: this.selected
+        type: this.selected,
+        placeholder: this.placeholderInputTypes.includes(this.selected) ? this.placeholderTitle : '',
+        options: (this.optionInputTypes.includes(this.selected)) ? this.inputInnerOptions : []
       });
-      this.selected = null;
+      //Reset Values
+      this.selected = 'text';
+      this.inputInnerOptions = ['Option'],
       this.labelTitle = '';
+      this.placeholderTitle = '';
+      this.toggleOptionOne = '';
+      this.toggleOptionTwo = '';
     },
     addInnerOption() {
       this.inputInnerOptions.push(`Option`);
