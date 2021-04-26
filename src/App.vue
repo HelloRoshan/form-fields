@@ -4,14 +4,7 @@
       <!-- TODO: Separate the Components -->
       <!-- TODO: Add Form Title and Description -->
       <b-card>
-          <b-row class="m-0">
-          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
-            <label for="input-type-selection">Select an Input Type</label>
-            <b-form-select
-              id="input-type-selection"
-              v-model="selected"
-              :options="options"></b-form-select>
-          </b-col>
+        <b-row class="m-0">
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
             <label for="label-title ">Enter Label for Input <span class="required-text">(* Required)</span></label>
             <b-form-input
@@ -19,6 +12,13 @@
               v-model.trim="labelTitle"
               :required="true"
               type="text"></b-form-input>
+          </b-col>
+          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
+            <label for="input-type-selection">Select an Input Type</label>
+            <b-form-select
+              id="input-type-selection"
+              v-model="selected"
+              :options="options"></b-form-select>
           </b-col>
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
             <label for="label-title ">Enter Placeholder for Input Type</label>
@@ -31,7 +31,7 @@
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
             <b-row class="m-0">
               <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
-              <b-col sm="12" class="p-0"><ToggleSwitch @change="updateRequiredStatus"/></b-col>
+              <b-col sm="12" class="p-0"><ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/></b-col>
             </b-row>
           </b-col>
           <!-- TODO: Add If required Toggle -->
@@ -60,7 +60,7 @@
                     <BIconTrash  @click="removeOption(index)" style="color:red;"/>
                   </b-col>
                   <b-col :sm="inputInnerOptions.length > 1 ? 4: 5">
-                    <b-button variant="success" @click="addInnerOption" v-if="index + 1 == inputInnerOptions.length">Add New Option</b-button>
+                    <b-button variant="success" size="sm" @click="addInnerOption" v-if="index + 1 == inputInnerOptions.length">Add New Option</b-button>
                   </b-col>
                 </b-row>
               </template>
@@ -71,37 +71,72 @@
       
       <!-- TODO: Add possible checks for each inputtype -->
       <b-row class="m-0 mt-2">
-        <b-button variant="success" :disabled="inputValidityCheck" @click="addInput">Add Input</b-button>
+        <b-button variant="success" size="sm" :disabled="inputValidityCheck" @click="addInput">Add Input</b-button>
       </b-row>
 
       <b-card class="mt-4 mb-4" align="left">
+        <b-button
+          pill
+          variant="success"
+          size="sm"
+          v-b-modal="'form-data-preview'"
+          @click="previewForm"
+          v-if="inputTypeList.length"
+          style="position: absolute; right: 1.25rem;">Preview Form Data</b-button>
         <b-row v-for="(inputType, index) in inputTypeList" :key="index" class="m-2 pb-4 pt-4 form-input-row">
           <b-col sm="12" class="p-2">
-            <label :for="'input-'+index">{{index + 1  +')&nbsp;'}}{{inputType.label}} <span class="required-text" v-if="inputType.isRequired">(* Required)</span> :</label>
+            <label
+              :for="'input-'+index">
+              {{index + 1  +')&nbsp;'}}{{inputType.label}} <span class="required-text" v-if="inputType.isRequired">(* Required)</span>
+            </label>
           </b-col>
           <b-col sm="12">
             <template v-if="['text','date','time'].includes(inputType.type)">
-              <b-form-input :required="inputType.isRequired" :id="'input-'+index" class="input-width mb-2" :type="inputType.type" :placeholder="inputType.placeholder"></b-form-input>
+              <b-form-input
+                :required="inputType.isRequired"
+                :id="'input-'+index"
+                :type="inputType.type"
+                :placeholder="inputType.placeholder"
+                v-model.trim="inputTypeList[index].value"
+                class="input-width mb-2"></b-form-input>
             </template>
             <template v-else-if="inputType.type == 'textarea'">
-              <b-form-textarea rows="3" :required="inputType.isRequired"  class="input-width mb-2" :placeholder="inputType.placeholder"></b-form-textarea>
+              <b-form-textarea
+                rows="4"
+                max-rows="8"
+                no-resize
+                :required="inputType.isRequired"
+                :placeholder="inputType.placeholder"
+                v-model.trim="inputTypeList[index].value"
+                class="input-width mb-2"></b-form-textarea>
             </template>
             <template v-else-if="inputType.type == 'checkbox'">
-              <b-form-checkbox v-for="(option, index1) in inputType.options" :key="index1" class="mb-2 input-width">{{option}}</b-form-checkbox>
+              <b-form-checkbox-group v-model="inputTypeList[index].checkedOptions">
+                <b-form-checkbox
+                  v-for="(option, index1) in inputType.options"
+                  :key="index1"
+                  :value="option"
+                  class="mb-2 input-width">{{option}}</b-form-checkbox>
+              </b-form-checkbox-group>
             </template>
             <template v-else-if="inputType.type == 'radio'">
               <b-form-radio
                 v-for="(option, index1) in inputType.options"
                 :key="index +'radio'+index1"
                 :name="index+'radio-button'"
+                :value="option"
+                v-model="inputTypeList[index].value"
                 class="mb-2 input-width"
               >{{option}}</b-form-radio>
             </template>
             <template v-else-if="inputType.type == 'select'">
-              <b-form-select :options="inputType.options" class="mb-2 input-width"></b-form-select>
+              <b-form-select
+                :options="inputType.options"
+                v-model="inputTypeList[index].value"
+                class="mb-2 input-width"></b-form-select>
             </template>
             <template v-else-if="inputType.type == 'toggle'">
-              <ToggleSwitch />
+              <ToggleSwitch @change="(value) => $set(inputTypeList[index], 'value', value)" />
             </template>
           </b-col>
         </b-row>
@@ -109,6 +144,9 @@
           <p class="text-justify" style="font-size:.85rem;color: #999;">No Input Fields. Add Some New Fields</p>
         </b-row>
       </b-card>
+      <b-modal id="form-data-preview" size="xl" title="Form Data Table" hide-footer>
+        <b-table striped hover bordered :items="previewTableData"></b-table>
+      </b-modal>
     </b-container>
   </div>
 </template>
@@ -153,6 +191,19 @@ export default {
         (this.optionInputTypes.includes(this.selected) &&
           (!this.inputInnerOptions.length ||
             this.inputInnerOptions.some(opt => !!opt.trim() ==  false)));
+    },
+    previewTableData() {
+      return this.inputTypeList.map(inputType => {
+        return {
+          label: inputType.label,
+          type: inputType.type,
+          is_required: inputType.isRequired,
+          placeholder: this.placeholderInputTypes.includes(inputType.type) ? inputType.placeholder : 'N/A',
+          options: ['checkbox', 'radio', 'select'].includes(inputType.type) ? inputType.options.join(', ') : 'N/A',
+          selected_option: inputType.type == 'checkbox' ? inputType.checkedOptions.join(', ') : inputType.type == 'radio' ? inputType.value : 'N/A',
+          answer: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
+        }
+      })
     }
   },
   watch: {
@@ -181,7 +232,8 @@ export default {
           ? this.inputInnerOptions
           : [],
         checkedOptions: [],
-        isRequired: this.isRequired
+        isRequired: this.isRequired,
+        value: this.selected == 'toggle' ? false : '',
       });
       //Reset Values
       this.selected = 'text';
@@ -198,6 +250,8 @@ export default {
     },
     updateRequiredStatus(state) {
       this.isRequired = state;
+    },
+    previewForm() {
     }
   }
 }
@@ -227,6 +281,6 @@ label {
   border-bottom: none;
 }
 .input-width {
-  max-width: 420px;
+  max-width: 500px;
 }
 </style>
