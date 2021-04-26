@@ -62,7 +62,6 @@
                       type="text"></b-form-input>
                   </b-col>
                   <b-col sm="1" offset-sm="4" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
-                    <!-- TODO: Show on Hover -->
                     <BIconTrash  @click="removeOption(index)" style="color:red;" v-b-popover.hover.top="'Delete Option'"/>
                   </b-col>
                   <b-col :sm="inputInnerOptions.length > 1 ? 4: 5">
@@ -151,7 +150,7 @@
           </b-col>
         </b-row>
         <b-row v-if="!inputTypeList.length" class="m-0">
-          <p class="text-justify" style="font-size:.85rem;color: #999;">No Input Fields. Add Some New Fields</p>
+          <p class="no-input-field-text">No Input Fields. Add Some New Fields</p>
         </b-row>
       </b-card>
       <b-modal id="form-data-preview" size="xl" title="Form Data Table" hide-footer>
@@ -302,5 +301,11 @@ label {
 }
 .input-width {
   max-width: 500px;
+}
+.no-input-field-text {
+  font-size:.85rem;
+  color: #999;
+  width: 100%;
+  text-align: center;
 }
 </style>
