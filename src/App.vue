@@ -1,10 +1,16 @@
 <template>
   <div id="app">
     <b-container>
-      <!-- TODO: Separate the Components -->
       <!-- TODO: Add Form Title and Description -->
       <b-card>
         <b-row class="m-0">
+          <b-button
+            pill
+            variant="success"
+            size="sm"
+            :disabled="inputValidityCheck"
+            @click="addInput"
+            style="position: absolute; right: 1.25rem;">Add Input</b-button>
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
             <label for="label-title ">Enter Label for Input <span class="required-text">(* Required)</span></label>
             <b-form-input
@@ -57,10 +63,19 @@
                   </b-col>
                   <b-col sm="1" offset-sm="4" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
                     <!-- TODO: Show on Hover -->
-                    <BIconTrash  @click="removeOption(index)" style="color:red;"/>
+                    <BIconTrash  @click="removeOption(index)" style="color:red;" v-b-popover.hover.top="'Delete Option'"/>
                   </b-col>
                   <b-col :sm="inputInnerOptions.length > 1 ? 4: 5">
-                    <b-button variant="success" size="sm" @click="addInnerOption" v-if="index + 1 == inputInnerOptions.length">Add New Option</b-button>
+                    <b-button
+                      pill
+                      variant="success"
+                      size="sm"
+                      style="padding: .25rem .35rem;"
+                      v-b-popover.hover.right="'Add New Option'"
+                      @click="addInnerOption"
+                      v-if="index + 1 == inputInnerOptions.length">
+                      <BIconPlus style="font-size:1.4rem;" />
+                      </b-button>
                   </b-col>
                 </b-row>
               </template>
@@ -68,11 +83,6 @@
           </template>
         </b-row>
       </b-card>
-      
-      <!-- TODO: Add possible checks for each inputtype -->
-      <b-row class="m-0 mt-2">
-        <b-button variant="success" size="sm" :disabled="inputValidityCheck" @click="addInput">Add Input</b-button>
-      </b-row>
 
       <b-card class="mt-4 mb-4" align="left">
         <b-button
@@ -152,7 +162,7 @@
 </template>
 
 <script>
-import { BIconCircle, BIconCheckSquare, BIconTrash } from 'bootstrap-vue';
+import { BIconCircle, BIconCheckSquare, BIconTrash, BIconPlus } from 'bootstrap-vue';
 import ToggleSwitch from './components/ToggleSwitch.vue';
 
 export default {
@@ -161,6 +171,7 @@ export default {
     BIconCircle,
     BIconCheckSquare,
     BIconTrash,
+    BIconPlus,
     ToggleSwitch
   },
   data() {
@@ -200,7 +211,7 @@ export default {
           is_required: inputType.isRequired,
           placeholder: this.placeholderInputTypes.includes(inputType.type) ? inputType.placeholder : 'N/A',
           options: ['checkbox', 'radio', 'select'].includes(inputType.type) ? inputType.options.join(', ') : 'N/A',
-          selected_option: inputType.type == 'checkbox' ? inputType.checkedOptions.join(', ') : inputType.type == 'radio' ? inputType.value : 'N/A',
+          selected_options: inputType.type == 'checkbox' ? inputType.checkedOptions.join(', ') : inputType.type == 'radio' ? inputType.value : 'N/A',
           input_field_value: ['checkbox', 'radio'].includes(inputType.type) ? 'N/A' : inputType.value
         }
       })
