@@ -81,10 +81,10 @@
           </b-col>
           <b-col sm="12">
             <template v-if="['text','date','time'].includes(inputType.type)">
-              <b-form-input :id="'input-'+index" class="input-width mb-2" :type="inputType.type" :placeholder="inputType.placeholder"></b-form-input>
+              <b-form-input :required="inputType.isRequired" :id="'input-'+index" class="input-width mb-2" :type="inputType.type" :placeholder="inputType.placeholder"></b-form-input>
             </template>
             <template v-else-if="inputType.type == 'textarea'">
-              <b-form-textarea rows="3"  class="input-width mb-2" :placeholder="inputType.placeholder"></b-form-textarea>
+              <b-form-textarea rows="3" :required="inputType.isRequired"  class="input-width mb-2" :placeholder="inputType.placeholder"></b-form-textarea>
             </template>
             <template v-else-if="inputType.type == 'checkbox'">
               <b-form-checkbox v-for="(option, index1) in inputType.options" :key="index1" class="mb-2 input-width">{{option}}</b-form-checkbox>
