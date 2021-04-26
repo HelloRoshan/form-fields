@@ -4,13 +4,6 @@
       <!-- TODO: Add Form Title and Description -->
       <b-card bg-variant="light">
         <b-row class="m-0">
-          <b-button
-            pill
-            variant="success"
-            size="sm"
-            :disabled="inputValidityCheck"
-            @click="addInput"
-            style="position: absolute; right: 1.25rem;">Add Input</b-button>
           <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
             <label for="label-title ">Enter Label for Input</label>
             <b-form-input
@@ -81,6 +74,14 @@
               </template>
             </b-col>
           </template>
+
+          <b-button
+            pill
+            variant="success"
+            size="sm"
+            :disabled="inputValidityCheck"
+            @click="addInput"
+            style="position: absolute; right: 1.25rem;">Add Input</b-button>
         </b-row>
       </b-card>
 
