@@ -13,7 +13,7 @@
               :options="options"></b-form-select>
           </b-col>
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
-            <label for="label-title ">Enter Label for Input <span style="color:red;">*</span></label>
+            <label for="label-title ">Enter Label for Input <span class="required-text">(* Required)</span></label>
             <b-form-input
               id="label-title"
               v-model.trim="labelTitle"
@@ -88,6 +88,7 @@
       <b-row class="m-0 mt-2">
         <b-button variant="success" :disabled="inputValidityCheck" @click="addInput">Add Input</b-button>
       </b-row>
+
       <b-card class="mt-4 mb-4" align="left">
         <b-row v-for="(inputType, index) in inputTypeList" :key="inputType.id" class="mb-3">
           <b-col sm="3">
@@ -151,10 +152,10 @@ export default {
   computed: {
     inputValidityCheck() {
       return !this.labelTitle ||
-        !(this.optionInputTypes.includes(this.selected) &&
-          this.inputInnerOptions.length &&
-            this.inputInnerOptions.some(opt => !!opt ==  true)) ||
-            !(this.selected == 'toggle' && this.toggleOptionOne.trim() && this.toggleOptionTwo.trim());
+        (this.optionInputTypes.includes(this.selected) &&
+          (!this.inputInnerOptions.length ||
+            this.inputInnerOptions.some(opt => !!opt.trim() ==  false))) ||
+            (this.selected == 'toggle' && (!this.toggleOptionOne.trim() || !this.toggleOptionTwo.trim()));
     }
   },
   watch: {
@@ -211,5 +212,11 @@ export default {
 }
 label {
   font-weight: 700;
+}
+.required-text {
+  color:rgb(243, 55, 55);
+  font-weight:200;
+  font-size:.8rem;
+  letter-spacing:.5px;
 }
 </style>
