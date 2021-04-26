@@ -69,24 +69,34 @@
       </b-row>
 
       <b-card class="mt-4 mb-4" align="left">
-        <b-row v-for="(inputType, index) in inputTypeList" :key="inputType.id" class="mb-3">
-          <b-col sm="3">
-            <label :for="'input-'+index">{{inputType.label}} :</label>
+        <b-row v-for="(inputType, index) in inputTypeList" :key="index" class="m-2 pb-4 pt-4 form-input-row">
+          <b-col sm="12" class="p-2">
+            <label :for="'input-'+index">{{index + 1  +')&nbsp;'}}{{inputType.label}} :</label>
           </b-col>
-          <b-col :sm="9">
+          <b-col sm="12">
             <template v-if="['text','date','time'].includes(inputType.type)">
-              <b-form-input :id="'input-'+index" :type="inputType.type" :placeholder="inputType.placeholder"></b-form-input>
+              <b-form-input :id="'input-'+index" class="input-width mb-2" :type="inputType.type" :placeholder="inputType.placeholder"></b-form-input>
             </template>
             <template v-else-if="inputType.type == 'textarea'">
-              <b-form-textarea rows="3" :placeholder="inputType.placeholder"></b-form-textarea>
+              <b-form-textarea rows="3"  class="input-width mb-2" :placeholder="inputType.placeholder"></b-form-textarea>
             </template>
-            <template v-else-if="inputType.type == 'checkbox'"></template>
-            <template v-else-if="inputType.type == 'radio'"></template>
-            <template v-else-if="inputType.type == 'select'"></template>
+            <template v-else-if="inputType.type == 'checkbox'">
+              <b-form-checkbox v-for="(option, index1) in inputType.options" :key="index1" class="mb-2 input-width">{{option}}</b-form-checkbox>
+            </template>
+            <template v-else-if="inputType.type == 'radio'">
+              <b-form-radio
+                v-for="(option, index1) in inputType.options"
+                :key="index +'radio'+index1"
+                :name="index+'radio-button'"
+                class="mb-2 input-width"
+              >{{option}}</b-form-radio>
+            </template>
+            <template v-else-if="inputType.type == 'select'">
+              <b-form-select :options="inputType.options" class="mb-2 input-width"></b-form-select>
+            </template>
             <template v-else-if="inputType.type == 'toggle'">
               <ToggleSwitch />
             </template>
-            <template v-else-if="inputType.type == 'datetime'"></template>
           </b-col>
         </b-row>
         <b-row v-if="!inputTypeList.length" class="m-0">
@@ -113,14 +123,13 @@ export default {
     return {
       options: [
         {text: "Text", value: 'text'},
-        {text: "Text Area", value: 'textarea'}, // Exception need to use Textarea component
-        {text: "CheckBox",value: 'checkbox'}, // Exception
-        {text: "Radio Button", value: 'radio'},// Exception
-        {text: "Select Dropdown", value: 'select' },// Exception
-        {text: "Toggle Switch", value: 'toggle'},// Exception
+        {text: "Text Area", value: 'textarea'},
+        {text: "CheckBox",value: 'checkbox'},
+        {text: "Radio Button", value: 'radio'},
+        {text: "Select Dropdown", value: 'select' },
+        {text: "Toggle Switch", value: 'toggle'},
         {text: "Date", value: 'date'},
         {text: "Time", value: 'time'},
-        {text: "Date-Time", value: 'datetime'},// Exception
       ],
       placeholderInputTypes: ['text', 'textarea'],
       optionInputTypes: ['checkbox', 'radio', 'select'],
@@ -163,7 +172,8 @@ export default {
         placeholder: this.placeholderInputTypes.includes(this.selected) ? this.placeholderTitle : '',
         options: this.optionInputTypes.includes(this.selected)
           ? this.inputInnerOptions
-          : []
+          : [],
+        checkedOptions: []
       });
       //Reset Values
       this.selected = 'text';
@@ -197,5 +207,14 @@ label {
   font-weight:200;
   font-size:.8rem;
   letter-spacing:.5px;
+}
+.form-input-row {
+  border-bottom: 1px solid #ccc;
+}
+.form-input-row:last-child {
+  border-bottom: none;
+}
+.input-width {
+  max-width: 420px;
 }
 </style>
