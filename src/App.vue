@@ -30,8 +30,8 @@
           </b-col>
           <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
             <b-row class="m-0">
-              <b-col sm="10" class="p-0"><label>Required Field:</label></b-col>
-              <b-col sm="2"><ToggleSwitch @change="updateRequiredStatus"/></b-col>
+              <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
+              <b-col sm="12" class="p-0"><ToggleSwitch @change="updateRequiredStatus"/></b-col>
             </b-row>
           </b-col>
           <!-- TODO: Add If required Toggle -->
