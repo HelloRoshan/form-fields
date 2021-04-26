@@ -12,11 +12,12 @@
             @click="addInput"
             style="position: absolute; right: 1.25rem;">Add Input</b-button>
           <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
-            <label for="label-title ">Enter Label for Input <span class="required-text">(* Required)</span></label>
+            <label for="label-title ">Enter Label for Input</label>
             <b-form-input
               id="label-title"
               v-model.trim="labelTitle"
               :required="true"
+              :state="labelTitle.trim().length ? true : false"
               type="text"></b-form-input>
           </b-col>
           <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
