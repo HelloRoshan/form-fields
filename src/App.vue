@@ -28,6 +28,12 @@
               :required="true"
               type="text"></b-form-input>
           </b-col>
+          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
+            <b-row class="m-0">
+              <b-col sm="10" class="p-0"><label>Required Field:</label></b-col>
+              <b-col sm="2"><ToggleSwitch @change="updateRequiredStatus"/></b-col>
+            </b-row>
+          </b-col>
           <!-- TODO: Add If required Toggle -->
           <template v-if="optionInputTypes.includes(selected)">
             <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
@@ -71,7 +77,7 @@
       <b-card class="mt-4 mb-4" align="left">
         <b-row v-for="(inputType, index) in inputTypeList" :key="index" class="m-2 pb-4 pt-4 form-input-row">
           <b-col sm="12" class="p-2">
-            <label :for="'input-'+index">{{index + 1  +')&nbsp;'}}{{inputType.label}} :</label>
+            <label :for="'input-'+index">{{index + 1  +')&nbsp;'}}{{inputType.label}} <span class="required-text" v-if="inputType.isRequired">(* Required)</span> :</label>
           </b-col>
           <b-col sm="12">
             <template v-if="['text','date','time'].includes(inputType.type)">
@@ -138,6 +144,7 @@ export default {
       placeholderTitle: '',
       selected: 'text',
       inputTypeList: [],
+      isRequired: false
     }
   },
   computed: {
@@ -173,19 +180,24 @@ export default {
         options: this.optionInputTypes.includes(this.selected)
           ? this.inputInnerOptions
           : [],
-        checkedOptions: []
+        checkedOptions: [],
+        isRequired: this.isRequired
       });
       //Reset Values
       this.selected = 'text';
       this.inputInnerOptions = ['Option'],
       this.labelTitle = '';
       this.placeholderTitle = '';
+      this.isRequired = false;
     },
     addInnerOption() {
       this.inputInnerOptions.push(`Option`);
     },
     removeOption(index) {
       this.inputInnerOptions.splice(index, 1);
+    },
+    updateRequiredStatus(state) {
+      this.isRequired = state;
     }
   }
 }
