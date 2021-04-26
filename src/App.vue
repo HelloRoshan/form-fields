@@ -2,7 +2,7 @@
   <div id="app">
     <b-container>
       <!-- TODO: Add Form Title and Description -->
-      <b-card>
+      <b-card bg-variant="light">
         <b-row class="m-0">
           <b-button
             pill
@@ -11,7 +11,7 @@
             :disabled="inputValidityCheck"
             @click="addInput"
             style="position: absolute; right: 1.25rem;">Add Input</b-button>
-          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
+          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
             <label for="label-title ">Enter Label for Input <span class="required-text">(* Required)</span></label>
             <b-form-input
               id="label-title"
@@ -19,14 +19,14 @@
               :required="true"
               type="text"></b-form-input>
           </b-col>
-          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
+          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
             <label for="input-type-selection">Select an Input Type</label>
             <b-form-select
               id="input-type-selection"
               v-model="selected"
               :options="options"></b-form-select>
           </b-col>
-          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
+          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
             <label for="label-title ">Enter Placeholder for Input Type</label>
             <b-form-input
               id="label-title"
@@ -34,13 +34,13 @@
               :required="true"
               type="text"></b-form-input>
           </b-col>
-          <b-col sm="4" class="p-0 mr-2 mt-2 mb-2">
+          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
             <b-row class="m-0">
               <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
               <b-col sm="12" class="p-0"><ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/></b-col>
             </b-row>
           </b-col>
-          <!-- TODO: Add If required Toggle -->
+
           <template v-if="optionInputTypes.includes(selected)">
             <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
               <template v-for="(inputInnerOption, index) in inputInnerOptions">
@@ -84,7 +84,7 @@
         </b-row>
       </b-card>
 
-      <b-card class="mt-4 mb-4" align="left">
+      <b-card bg-variant="light" border-variant="info" class="mt-4 mb-4" align="left">
         <b-button
           pill
           variant="success"
