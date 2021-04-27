@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- TODO: Add Modular Components -->
     <b-container>
       <b-card bg-variant="light">
         <template #header>
@@ -37,17 +38,21 @@
               :options="options"></b-form-select>
           </b-col>
           <b-col sm="4" class="mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
-            <label for="label-title ">Enter Placeholder for Input Type</label>
+            <label for="placeholder-title ">Enter Placeholder for Input Type</label>
             <b-form-input
-              id="label-title"
+              id="placeholder-title"
               v-model.trim="placeholderTitle"
               :required="true"
               type="text"></b-form-input>
           </b-col>
           <b-col sm="4" class="mt-2 mb-2" v-if="selected != 'toggle'">
             <b-row class="m-0">
-              <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
-              <b-col sm="12" class="p-0"><ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/></b-col>
+              <b-col sm="12" class="p-0">
+                <label>Required Field:</label>
+              </b-col>
+              <b-col sm="12" class="p-0">
+                <ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/>
+              </b-col>
             </b-row>
           </b-col>
 
@@ -73,7 +78,10 @@
                       type="text"></b-form-input>
                   </b-col>
                   <b-col sm="1" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
-                    <BIconTrash  @click="removeOption(index)" style="color:red;" v-b-popover.hover.top="'Delete Option'"/>
+                    <BIconTrash
+                      @click="removeOption(index)"
+                      style="color:red;"
+                      v-b-popover.hover.top="'Delete Option'"/>
                   </b-col>
                   <b-col :sm="inputInnerOptions.length > 1 ? 4: 5" class="pl-0">
                     <b-button
@@ -96,7 +104,7 @@
 
       <b-card
         bg-variant="light"
-        border-variant="info"
+        border-variant="success"
         class="mt-4 mb-4"
         align="left">
         <template #header>
@@ -110,87 +118,109 @@
                 variant="success"
                 size="sm"
                 v-b-modal="'form-data-preview'"
-                @click="previewForm"
                 v-if="inputTypeList.length"
                 style="position: absolute; right: 1.25rem;">Preview Form Data</b-button>
             </b-col>
           </b-row>
         </template>
 
-        <b-row v-for="(inputType, index) in inputTypeList" :key="index" class="m-2 pb-4 pt-4 form-input-row">
-          <b-col sm="12" class="p-2">
-            <label
-              :for="'input-'+index">
-              {{index + 1  +')&nbsp;'}}{{inputType.label}}
-            </label>
-          </b-col>
-          <b-col sm="12">
-            <template v-if="['text','date','time'].includes(inputType.type)">
-              <b-form-input
-                :required="inputType.isRequired"
-                :id="'input-'+index"
-                :type="inputType.type"
-                :placeholder="inputType.placeholder"
-                v-model.trim="inputTypeList[index].value"
-                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
-                class="input-width mb-2"></b-form-input>
-            </template>
-            <template v-else-if="inputType.type == 'textarea'">
-              <b-form-textarea
-                rows="5"
-                no-resize
-                :required="inputType.isRequired"
-                :placeholder="inputType.placeholder"
-                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
-                v-model.trim="inputTypeList[index].value"
-                class="input-width mb-2"></b-form-textarea>
-            </template>
-            <template v-else-if="inputType.type == 'checkbox'">
-              <b-form-checkbox-group
-                v-model="inputTypeList[index].checkedOptions"
-                :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
-                <b-form-checkbox
-                  v-for="(option, index1) in inputType.options"
-                  :key="index1"
-                  :value="option"
-                  class="mb-2 input-width">{{option}}</b-form-checkbox>
-                  <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
-                    Please select one or more options
+        <!-- Form Field Display -->
+        <b-row
+          v-for="(inputType, index) in inputTypeList"
+          :key="index"
+          class="m-2 pb-4 pt-4 form-input-row"
+          @mouseover="hoverHandler(index)"
+          @mouseleave="unHoverHandler()">
+          <b-col sm="10">
+            <b-row>
+              <b-col sm="12" class="p-2">
+                <label
+                  :for="'input-'+index">
+                  {{index + 1  +')&nbsp;'}}{{inputType.label}}
+                </label>
+              </b-col>
+              <b-col sm="12">
+                <template v-if="['text','date','time'].includes(inputType.type)">
+                  <b-form-input
+                    :required="inputType.isRequired"
+                    :id="'input-'+index"
+                    :type="inputType.type"
+                    :placeholder="inputType.placeholder"
+                    v-model.trim="inputTypeList[index].value"
+                    :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
+                    class="input-width mb-2"></b-form-input>
+                </template>
+                <template v-else-if="inputType.type == 'textarea'">
+                  <b-form-textarea
+                    rows="5"
+                    no-resize
+                    :required="inputType.isRequired"
+                    :placeholder="inputType.placeholder"
+                    :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
+                    v-model.trim="inputTypeList[index].value"
+                    class="input-width mb-2"></b-form-textarea>
+                </template>
+                <template v-else-if="inputType.type == 'checkbox'">
+                  <b-form-checkbox-group
+                    v-model="inputTypeList[index].checkedOptions"
+                    :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
+                    <b-form-checkbox
+                      v-for="(option, index1) in inputType.options"
+                      :key="index1"
+                      :value="option"
+                      class="mb-2 input-width">{{option}}</b-form-checkbox>
+                      <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].checkedOptions.length ? true : false">
+                        Please select one or more options
+                      </b-form-invalid-feedback>
+                  </b-form-checkbox-group>
+                </template>
+                <template v-else-if="inputType.type == 'radio'">
+                  <b-form-radio
+                    v-for="(option, index1) in inputType.options"
+                    :key="index +'radio'+index1"
+                    :name="index+'radio-button'"
+                    :value="option"
+                    :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
+                    v-model="inputTypeList[index].value"
+                    class="mb-2 input-width"
+                  >{{option}}</b-form-radio>
+                  <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false">
+                    Please select one option
                   </b-form-invalid-feedback>
-              </b-form-checkbox-group>
-            </template>
-            <template v-else-if="inputType.type == 'radio'">
-              <b-form-radio
-                v-for="(option, index1) in inputType.options"
-                :key="index +'radio'+index1"
-                :name="index+'radio-button'"
-                :value="option"
-                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
-                v-model="inputTypeList[index].value"
-                class="mb-2 input-width"
-              >{{option}}</b-form-radio>
-              <b-form-invalid-feedback :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false">
-                Please select one option
-              </b-form-invalid-feedback>
-            </template>
-            <template v-else-if="inputType.type == 'select'">
-              <b-form-select
-                :options="inputType.options"
-                v-model="inputTypeList[index].value"
-                :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
-                class="mb-2 input-width"></b-form-select>
-            </template>
-            <template v-else-if="inputType.type == 'toggle'">
-              <ToggleSwitch @change="(value) => $set(inputTypeList[index], 'value', value)" />
-            </template>
+                </template>
+                <template v-else-if="inputType.type == 'select'">
+                  <b-form-select
+                    :options="inputType.options"
+                    v-model="inputTypeList[index].value"
+                    :state="!inputType.isRequired ? null : inputTypeList[index].value != '' ? true : false"
+                    class="mb-2 input-width"></b-form-select>
+                </template>
+                <template v-else-if="inputType.type == 'toggle'">
+                  <ToggleSwitch @change="(value) => $set(inputTypeList[index], 'value', value)" />
+                </template>
+              </b-col>
+            </b-row>
+          </b-col>
+          <b-col sm="2" style="margin:auto;">
+            <BIconTrash
+              v-if="hoverIndex == index"
+              @click="removeFormField(index)"
+              class="form-field-trash-icon"
+              v-b-popover.hover.top="'Delete Form Field'"/>
           </b-col>
         </b-row>
         <b-row v-if="!inputTypeList.length" class="m-0">
           <p class="no-input-field-text">No Input Fields. Add Some New Fields</p>
         </b-row>
       </b-card>
+
+      <!-- Modal: Data Preview in Tabular Form -->
       <b-modal id="form-data-preview" size="xl" title="Form Data Table" hide-footer>
-        <b-table striped hover bordered :items="previewTableData"></b-table>
+        <b-table
+          striped
+          hover
+          bordered
+          :items="previewTableData"></b-table>
       </b-modal>
     </b-container>
   </div>
@@ -228,7 +258,8 @@ export default {
       placeholderTitle: '',
       selected: 'text',
       inputTypeList: [],
-      isRequired: false
+      isRequired: false,
+      hoverIndex: null
     }
   },
   computed: {
@@ -303,10 +334,17 @@ export default {
     removeOption(index) {
       this.inputInnerOptions.splice(index, 1);
     },
+    removeFormField(index) {
+      this.inputTypeList.splice(index, 1);
+    },
     updateRequiredStatus(state) {
       this.isRequired = state;
     },
-    previewForm() {
+    hoverHandler(index) {
+      this.hoverIndex = index;
+    },
+    unHoverHandler() {
+      this.hoverIndex = null;
     }
   }
 }
@@ -353,5 +391,10 @@ label {
   font-size:.8rem;
   color: #999;
   font-weight:600;
+}
+.form-field-trash-icon {
+  color:red;
+  cursor:pointer;
+  font-size:1.5rem;
 }
 </style>
