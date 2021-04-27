@@ -1,10 +1,26 @@
 <template>
   <div id="app">
     <b-container>
-      <!-- TODO: Add Form Title and Description -->
       <b-card bg-variant="light">
+        <template #header>
+          <b-row align-h="between">
+            <b-col>
+              <header class="card-top-header">Input Field Details</header>
+              <h3 class="mt-1 card-top-sub-header">Create input fields to populate the Form Below</h3>
+            </b-col>
+            <b-col>
+              <b-button
+                pill
+                variant="success"
+                size="sm"
+                :disabled="inputValidityCheck"
+                @click="addInput"
+                style="position: absolute; right: 1.25rem;">Create Input Field</b-button>
+            </b-col>
+          </b-row>
+        </template>
         <b-row class="m-0">
-          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
+          <b-col sm="4" class="mt-2 mb-2">
             <label for="label-title ">Enter Label for Input</label>
             <b-form-input
               id="label-title"
@@ -13,14 +29,14 @@
               :state="labelTitle.trim().length ? true : false"
               type="text"></b-form-input>
           </b-col>
-          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2">
+          <b-col sm="4" class="mt-2 mb-2">
             <label for="input-type-selection">Select an Input Type</label>
             <b-form-select
               id="input-type-selection"
               v-model="selected"
               :options="options"></b-form-select>
           </b-col>
-          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
+          <b-col sm="4" class="mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
             <label for="label-title ">Enter Placeholder for Input Type</label>
             <b-form-input
               id="label-title"
@@ -28,7 +44,7 @@
               :required="true"
               type="text"></b-form-input>
           </b-col>
-          <b-col sm="4" class="p-0 mr-4 mt-2 mb-2" v-if="selected != 'toggle'">
+          <b-col sm="4" class="mt-2 mb-2" v-if="selected != 'toggle'">
             <b-row class="m-0">
               <b-col sm="12" class="p-0"><label>Required Field:</label></b-col>
               <b-col sm="12" class="p-0"><ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/></b-col>
@@ -36,10 +52,10 @@
           </b-col>
 
           <template v-if="optionInputTypes.includes(selected)">
-            <b-col sm="12" class="p-0 mr-2 mt-2 mb-2">
+            <b-col sm="12" class="mt-2 mb-2">
               <template v-for="(inputInnerOption, index) in inputInnerOptions">
                 <b-row :key="index" class="mt-2 mb-3">
-                  <b-col sm="1" style="margin: auto;text-align:center;">
+                  <b-col sm="1" style="margin: auto;text-align:left;">
                     <template v-if="selected == 'checkbox'">
                       <BIconCheckSquare />
                     </template>
@@ -50,15 +66,15 @@
                       {{index + 1}}.
                     </template>
                   </b-col>
-                  <b-col sm="6">
+                  <b-col sm="6" class="pl-0">
                     <b-form-input
                       v-model.trim="inputInnerOptions[index]"
                       type="text"></b-form-input>
                   </b-col>
-                  <b-col sm="1" offset-sm="4" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
+                  <b-col sm="1" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
                     <BIconTrash  @click="removeOption(index)" style="color:red;" v-b-popover.hover.top="'Delete Option'"/>
                   </b-col>
-                  <b-col :sm="inputInnerOptions.length > 1 ? 4: 5">
+                  <b-col :sm="inputInnerOptions.length > 1 ? 4: 5" class="pl-0">
                     <b-button
                       pill
                       variant="success"
@@ -74,26 +90,32 @@
               </template>
             </b-col>
           </template>
-
-          <b-button
-            pill
-            variant="success"
-            size="sm"
-            :disabled="inputValidityCheck"
-            @click="addInput"
-            style="position: absolute; right: 1.25rem;">Add Input</b-button>
         </b-row>
       </b-card>
 
-      <b-card bg-variant="light" border-variant="info" class="mt-4 mb-4" align="left">
-        <b-button
-          pill
-          variant="success"
-          size="sm"
-          v-b-modal="'form-data-preview'"
-          @click="previewForm"
-          v-if="inputTypeList.length"
-          style="position: absolute; right: 1.25rem;">Preview Form Data</b-button>
+      <b-card
+        bg-variant="light"
+        border-variant="info"
+        class="mt-4 mb-4"
+        align="left">
+        <template #header>
+          <b-row>
+            <b-col>
+              <header class="card-top-header">Created Form Fields</header>
+            </b-col>
+            <b-col>
+              <b-button
+                pill
+                variant="success"
+                size="sm"
+                v-b-modal="'form-data-preview'"
+                @click="previewForm"
+                v-if="inputTypeList.length"
+                style="position: absolute; right: 1.25rem;">Preview Form Data</b-button>
+            </b-col>
+          </b-row>
+        </template>
+
         <b-row v-for="(inputType, index) in inputTypeList" :key="index" class="m-2 pb-4 pt-4 form-input-row">
           <b-col sm="12" class="p-2">
             <label
@@ -261,7 +283,7 @@ export default {
 
       // Notification
       this.$bvToast.toast('New Input Field added to Form', {
-        title: 'Input Added',
+        title: 'Input Field Created',
         autoHideDelay: 3000,
         variant: 'success',
         solid: true,
@@ -299,6 +321,7 @@ export default {
 }
 label {
   font-weight: 700;
+  font-size: .9rem;
 }
 .required-text {
   color:rgb(243, 55, 55);
@@ -320,5 +343,14 @@ label {
   color: #999;
   width: 100%;
   text-align: center;
+}
+.card-top-header {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.card-top-sub-header {
+  font-size:.8rem;
+  color: #999;
+  font-weight:600;
 }
 </style>
