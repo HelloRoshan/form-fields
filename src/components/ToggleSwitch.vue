@@ -75,18 +75,18 @@ export default {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #84d897;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #84d897;
 }
 
 input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
-  background-color: #063458;
+  background-color: #28a745;
 }
 
 /* Rounded sliders */
