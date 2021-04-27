@@ -69,6 +69,7 @@
                   <b-col sm="6" class="pl-0">
                     <b-form-input
                       v-model.trim="inputInnerOptions[index]"
+                      placeholder="Enter Option"
                       type="text"></b-form-input>
                   </b-col>
                   <b-col sm="1" style="margin: auto;cursor: pointer;" v-if="inputInnerOptions.length > 1">
