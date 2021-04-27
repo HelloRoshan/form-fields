@@ -316,9 +316,8 @@ export default {
       // Notification
       this.$bvToast.toast('New Input Field added to Form', {
         title: 'Input Field Created',
-        autoHideDelay: 3000,
+        autoHideDelay: 2000,
         variant: 'success',
-        solid: true,
       });
 
       //Reset Values
