@@ -249,6 +249,11 @@ export default {
     },
     removeFormField(index) {
       this.inputTypeList.splice(index, 1);
+      this.$bvToast.toast('Input Field removed from Form', {
+        title: 'Input Field Removed',
+        autoHideDelay: 2000,
+        variant: 'danger',
+      });
     },
     updateRequiredStatus(state) {
       this.isRequired = state;
