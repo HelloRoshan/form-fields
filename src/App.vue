@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-container>
-      <b-card bg-variant="light">
+      <b-card bg-variant="light" header-class="card-header-bg">
         <template #header>
           <b-row align-h="between">
             <b-col>
@@ -105,6 +105,7 @@
         bg-variant="light"
         border-variant="success"
         class="mt-4 mb-4"
+        header-class="sticky-top card-header-bg"
         align="left">
         <template #header>
           <b-row>
@@ -282,5 +283,8 @@ label {
   font-size:.8rem;
   color: #999;
   font-weight:600;
+}
+.card-header-bg {
+  background-color: #f0f1f2 !important;
 }
 </style>
