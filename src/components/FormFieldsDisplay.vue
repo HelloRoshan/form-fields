@@ -184,6 +184,7 @@ export default {
 }
 .no-input-field-text {
   font-size:.85rem;
+  font-family: 'Hind-Light', Avenir, Helvetica, Arial, sans-serif;
   color: #999;
   width: 100%;
   text-align: center;
