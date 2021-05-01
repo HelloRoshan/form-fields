@@ -17,8 +17,9 @@
 				</b-col>
 			</b-row>
 		</template>
-		<b-row class="m-0">
-			<b-col sm="4" class="mt-2 mb-2">
+
+		<b-row class="m-0 pb-4">
+			<b-col sm="6" md="4" class="mt-2 mb-2">
 				<label for="label-title ">Enter Label for Input</label>
 				<b-form-input
 					id="label-title"
@@ -27,29 +28,19 @@
 					:state="labelTitle.trim().length ? true : false"
 					type="text"></b-form-input>
 			</b-col>
-			<b-col sm="4" class="mt-2 mb-2">
+			<b-col sm="6" md="4" class="mt-2 mb-2">
 				<label for="input-type-selection">Select an Input Type</label>
 				<b-form-select
 					id="input-type-selection"
 					v-model="selected"
 					:options="options"></b-form-select>
 			</b-col>
-			<b-col sm="4" class="mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
+			<b-col sm="6" md="4" class="mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
 				<label for="placeholder-title ">Enter Placeholder for Input Type</label>
 				<b-form-input
 					id="placeholder-title"
 					v-model.trim="placeholderTitle"
 					type="text"></b-form-input>
-			</b-col>
-			<b-col sm="4" class="mt-2 mb-2" v-if="selected != 'toggle'">
-				<b-row class="m-0">
-					<b-col sm="12" class="p-0">
-						<label>Required Field:</label>
-					</b-col>
-					<b-col sm="12" class="p-0">
-						<ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/>
-					</b-col>
-				</b-row>
 			</b-col>
 
 			<template v-if="optionInputTypes.includes(selected)">
@@ -95,6 +86,16 @@
 					</template>
 				</b-col>
 			</template>
+		</b-row>
+		<b-row class="m-0 pt-4" style="border-top:1px solid #ccc;" v-if="selected != 'toggle'">
+			<b-col class="mt-2 mb-2">
+				<b-row class="m-0">
+					<label>Required</label>
+					<b-col class="ml-4 p-0">
+						<ToggleSwitch :default-state="isRequired" @change="updateRequiredStatus"/>
+					</b-col>
+				</b-row>
+			</b-col>
 		</b-row>
 	</b-card>
 </template>
