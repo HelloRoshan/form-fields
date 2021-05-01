@@ -186,6 +186,7 @@ export default {
       this.inputInnerOptions = ['Option'],
       this.labelTitle = '';
       this.placeholderTitle = '';
+      this.additionalDescription = '';
       this.isRequired = false;
     },
     addInnerOption() {
