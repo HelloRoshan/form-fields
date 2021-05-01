@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-container>
-      <b-card bg-variant="light" header-class="card-header-bg">
+      <b-card bg-variant="light" header-class="sticky-top card-header-bg">
         <template #header>
           <b-row align-h="between">
             <b-col>
@@ -127,6 +127,7 @@
         <!-- Form Field Display -->
         <FormFieldsDisplay
           :inputTypeList="inputTypeList"
+          @reorder="updateinputTypeList"
           @removeFormField="removeFormField" />
 
       </b-card>
@@ -259,6 +260,9 @@ export default {
     updateRequiredStatus(state) {
       this.isRequired = state;
     },
+    updateinputTypeList(updatedArray) {
+      this.inputTypeList = updatedArray;
+    }
   }
 }
 </script>
