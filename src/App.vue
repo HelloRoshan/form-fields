@@ -128,4 +128,8 @@ label {
 .card-header-bg {
   background-color: #f0f1f2 !important;
 }
+::placeholder {
+  font-family: 'Hind-Light', Avenir, Helvetica, Arial, sans-serif;
+  font-size: .9rem;
+}
 </style>
