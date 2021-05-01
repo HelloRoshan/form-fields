@@ -23,10 +23,10 @@
           <b-col sm="9">
             <b-row>
               <b-col sm="12" class="p-2">
-                <label
-                  :for="'input-'+index">
+                <label :for="'input-'+index" class="question-title">
                   {{index + 1  +')&nbsp;'}}{{inputType.label}}
                 </label>
+                <h6 class="question-description" v-if="inputType.description">{{inputType.description}}</h6>
               </b-col>
               <b-col sm="12">
                 <template v-if="['text','date','time'].includes(inputType.type)">
@@ -37,6 +37,7 @@
                     :placeholder="inputType.placeholder"
                     v-model.trim="inputTypeList[index].value"
                     :state="valueInputValidState(inputType, index)"
+                    :class="['date', 'time'].includes(inputType.type) ? 'datetime-input-width' : ''"
                     class="input-width mb-2"></b-form-input>
                 </template>
                 <template v-else-if="inputType.type == 'textarea'">
@@ -176,7 +177,10 @@ export default {
   border-bottom: none;
 }
 .input-width {
-  max-width: 500px;
+  max-width: 75%;
+}
+.datetime-input-width {
+  max-width: 40%;
 }
 .no-input-field-text {
   font-size:.85rem;
@@ -191,5 +195,14 @@ export default {
 .input-field-drag-handler-icon {
   color:#555;
   font-size: 1.5rem;
+}
+label.question-title {
+  font-size: 1.1rem;
+  margin-bottom: .3rem;
+}
+.question-description {
+  color: #aaa;
+  font-size: .75rem;
+  font-weight: 500;
 }
 </style>

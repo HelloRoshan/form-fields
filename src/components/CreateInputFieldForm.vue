@@ -1,5 +1,5 @@
 <template>
-	<b-card bg-variant="light" header-class="sticky-top card-header-bg">
+	<b-card bg-variant="light" header-class="sticky-top card-header-bg" class="shadow">
 		<template #header>
 			<b-row align-h="between">
 				<b-col>
@@ -34,6 +34,14 @@
 					id="input-type-selection"
 					v-model="selected"
 					:options="options"></b-form-select>
+			</b-col>
+			<b-col sm="6" md="4" class="mt-2 mb-2">
+				<label for="description-title ">Enter Additional Description</label>
+				<b-form-input
+					id="description-title"
+					placeholder="Description"
+					v-model.trim="additionalDescription"
+					type="text"></b-form-input>
 			</b-col>
 			<b-col sm="6" md="4" class="mt-2 mb-2" v-if="placeholderInputTypes.includes(selected)">
 				<label for="placeholder-title ">Enter Placeholder for Input Type</label>
@@ -129,6 +137,7 @@ export default {
       inputInnerOptions: ['Option'],
       labelTitle: '',
       placeholderTitle: '',
+			additionalDescription: '',
       selected: 'text',
       isRequired: false
 		};
@@ -161,6 +170,7 @@ export default {
 				label: this.labelTitle,
         type: this.selected,
         placeholder: this.placeholderInputTypes.includes(this.selected) ? this.placeholderTitle : '',
+				description: this.additionalDescription.trim(),
         options: this.optionInputTypes.includes(this.selected)
           ? this.inputInnerOptions
           : [],

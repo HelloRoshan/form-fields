@@ -6,8 +6,7 @@
 
       <b-card
         bg-variant="light"
-        border-variant="success"
-        class="mt-4 mb-4"
+        class="mt-4 mb-4 shadow"
         header-class="sticky-top card-header-bg"
         align="left">
         <template #header>
