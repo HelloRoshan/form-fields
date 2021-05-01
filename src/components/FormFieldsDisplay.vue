@@ -201,8 +201,9 @@ label.question-title {
   margin-bottom: .3rem;
 }
 .question-description {
-  color: #aaa;
-  font-size: .75rem;
+  color: #999;
+  font-size: .8rem;
   font-weight: 500;
+  font-family: 'Hind-Medium', Avenir, Helvetica, Arial, sans-serif;
 }
 </style>

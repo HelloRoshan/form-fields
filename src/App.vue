@@ -103,8 +103,9 @@ export default {
 </script>
 
 <style>
+@import './assets/css/fonts.css';
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Hind-Medium', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -119,6 +120,7 @@ label {
   font-size: 1.2rem;
 }
 .card-top-sub-header {
+  font-family: 'Hind-Light', Avenir, Helvetica, Arial, sans-serif;
   font-size:.8rem;
   color: #999;
   font-weight:600;
