@@ -87,7 +87,7 @@
 									v-b-popover.hover.right="'Add New Option'"
 									@click="addInnerOption"
 									v-if="index + 1 == inputInnerOptions.length">
-									<BIconPlus style="font-size:1.4rem;" />
+									<BIconPlus style="font-size:1.4rem;vertical-align:middle;" />
 									</b-button>
 							</b-col>
 						</b-row>
